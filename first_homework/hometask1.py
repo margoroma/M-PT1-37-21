@@ -1,7 +1,6 @@
-
 import decimal
 
-decimal.getcontext().prec = 2
+decimal.getcontext().prec = 7
 
 def summary(depo,percent,year):
 
@@ -10,7 +9,7 @@ def summary(depo,percent,year):
 
     for i in range(month):
 
-        per_month = depo*perc_per_month
+        per_month = decimal.Decimal(depo)*decimal.Decimal(perc_per_month)
         depo+=per_month
 
     return depo
