@@ -3,8 +3,9 @@ money = D(input('Введите начальную сумму вклада: '))
 year = D(input('Введите количество лет вклада: '))
 month = D('12')
 per = year*month
+
 perc = D(input('Введите процентную ставку вклада: '))
-rez = money*((D('1')+perc/(month*D('100')))**per)
+rez = money*((D('1')+perc/(month*D('100')))**D(per))
 
 
 print('Вложено     : '+ str(round(money,0)), 'руб.', int((round(money,2)-int(money))*100) , 'коп.')
