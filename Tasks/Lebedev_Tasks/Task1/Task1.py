@@ -1,6 +1,6 @@
 sum=20000
 month=1
 while month<=59:
-    sum=sum*1.15
+    sum+=sum*0.0125
     month+=1
-print(sum)
+print(round(sum, 2))
