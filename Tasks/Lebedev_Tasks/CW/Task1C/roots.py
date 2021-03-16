@@ -1,15 +1,19 @@
-s=""
+s =  ""
 a=float(input('Введите коэффициент a: '))
+if a>0:
+    s="ax*x"
+else:
+    s="-ax*x"
 b=float(input('Введите коэффициент b: '))
 if b>0:
-    s="ax*x-bx"
+    s=s + "-bx"
 else:
-    S="ax*x+bx"
+    s=s + "+bx"
 c=float(input('Введите коэффициент с: '))
 if c>0:
-    s="ax*x+bx-c=0"
+    s=s + "-c=0"
 else:
-    s="ax*x+bx+c=0"
+    s=s + "+c=0"
 
 print("Уравнение: \n" )
 print(s)
