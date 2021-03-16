@@ -18,6 +18,14 @@ def is_decimal(string):
         return False
 
 
+def print_warning(warning_str, delay=1.5):
+    """ Вывод предупреждения с задержкой на указанное время (сек.) и с возвратом каретки в начало строки.
+    """
+    print(f'\r{warning_str}', end='')
+    sleep(delay)
+    print('\r', end='')
+
+
 def calc_deposit():
     # первоначальные параметры
     params = {'start_balance': {'title': 'Первоначальный сумма (BYN', 'default_value': Decimal(0)},
@@ -40,16 +48,12 @@ def calc_deposit():
                 if is_decimal(new_value):
                     params[item] = Decimal(new_value)
                     break
-                print('\rНеобходимо указать число!', end='')
-                sleep(1.5)
-                print('\r', end='')
+                print_warning('Необходимо указать число!')
             elif isinstance(params[item]['default_value'], int):
                 if new_value.isdigit():
                     params[item] = int(new_value)
                     break
-                print('\rНеобходимо указать целое число!', end='')
-                sleep(1.5)
-                print('\r', end='')
+                print_warning('Необходимо указать целое число!')
     # собственно сам расчёт
     final_balance = reduce(lambda x, y: x + x * params['percent_per_annum'] / Decimal(100) / Decimal(12),
                            range(params['deposit_term']), params['start_balance'])
