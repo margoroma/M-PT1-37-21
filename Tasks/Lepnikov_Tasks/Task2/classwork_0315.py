@@ -27,7 +27,7 @@ def calc_qe():
                 coeff_dict[i] = int(input(f'Введите коэф."{i}": '))
                 if coeff_dict[i]:
                     break
-                print_warning('Необходимо указать ненулевое число!')
+                raise ValueError
             except ValueError:
                 print_warning('Необходимо указать ненулевое целое число!')
     title = f'Результирующая формула: {coeff_dict["a"]}*x**2' \
