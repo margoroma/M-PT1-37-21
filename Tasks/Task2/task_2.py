@@ -1,6 +1,5 @@
 """
 Текстовый вывод времени
-
 Реализовать текстовый вывод текущего времени +
 текстовый вывод времени, введённого с консоли.
 Для получения текущего времени использовать модуль datetime.
@@ -56,50 +55,48 @@ def time_string(time):
     hours = int(time.split(':')[0])
     minutes = int(time.split(':')[1])
 
-    if (hours >= 24) or (minutes > 59):
-        time_str = "Неверные значения времени"
-    elif hours >= 12:
+    if hours >= 12:
         hours -= 12
-        if minutes == 0:
-            if hours == 0:
-                time_str = "Полночь"
+    if minutes == 0:
+        if hours == 0:
+            time_str = "Полночь"
+        else:
+            if hours == 1:
+                hours_end = ""
+            elif (hours >= 2) and (hours <= 4):
+                hours_end = " часа"
             else:
-                if hours == 1:
-                    hours_end = ""
-                elif (hours >= 2) and (hours <= 4):
-                    hours_end = " часа"
-                else:
-                    hours_end = " часов"
-                time_str = str(hours_dict[hours][1]) + f"{hours_end} ровно"
+                hours_end = " часов"
+            time_str = str(hours_dict[hours][1]) + f"{hours_end} ровно"
 
-        elif minutes == 30:
-            time_str = "Половина " + str(hours_dict[hours + 1][0])
+    elif minutes == 30:
+        time_str = "Половина " + str(hours_dict[hours + 1][0])
 
-        elif (minutes > 0) and (minutes < 40):
-            if minutes < 20:
-                minutes_before_40 = str(min_dict[minutes])
-            else:
-                tens_minutes = minutes // 10 * 10
-                minutes -= tens_minutes
-                minutes_before_40 = "{0}{1}".format(
-                    str(tens_min_dict[tens_minutes]), str(min_dict[minutes]))
-            time_str = f"{minutes_before_40}" + str(hours_dict[hours + 1][0])
+    elif (minutes > 0) and (minutes < 40):
+        if minutes < 20:
+            minutes_before_40 = str(min_dict[minutes])
+        else:
+            tens_minutes = minutes // 10 * 10
+            minutes -= tens_minutes
+            minutes_before_40 = "{0}{1}".format(
+                str(tens_min_dict[tens_minutes]), str(min_dict[minutes]))
+        time_str = f"{minutes_before_40}" + str(hours_dict[hours + 1][0])
 
-        elif (minutes >= 40) and (minutes < 60):
-            minutes = 60 - minutes
-            if minutes == 1:
-                minutes_after_40 = "одной минуты "
-            elif minutes == 2:
-                minutes_after_40 = "двух минут "
-            elif minutes == 3:
-                minutes_after_40 = "трех минут "
-            elif minutes == 4:
-                minutes_after_40 = "четырех минут "
-            elif minutes == 20:
-                minutes_after_40 = "двадцати минут "
-            else:
-                minutes_after_40 = str(min_dict[minutes].replace("ь", "и"))
-            time_str = f"Без {minutes_after_40}" + str(hours_dict[hours + 1][1])
+    elif (minutes >= 40) and (minutes < 60):
+        minutes = 60 - minutes
+        if minutes == 1:
+            minutes_after_40 = "одной минуты "
+        elif minutes == 2:
+            minutes_after_40 = "двух минут "
+        elif minutes == 3:
+            minutes_after_40 = "трех минут "
+        elif minutes == 4:
+            minutes_after_40 = "четырех минут "
+        elif minutes == 20:
+            minutes_after_40 = "двадцати минут "
+        else:
+            minutes_after_40 = str(min_dict[minutes].replace("ь", "и"))
+        time_str = f"Без {minutes_after_40}" + str(hours_dict[hours + 1][1])
 
     return time_str
 
