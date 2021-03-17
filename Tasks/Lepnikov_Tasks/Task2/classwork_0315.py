@@ -27,13 +27,12 @@ def calc_qe():
                 coeff_dict[i] = int(input(f'Введите коэф."{i}": '))
                 if coeff_dict[i]:
                     break
-                print_warning('Необходимо указать ненулевое число!')
+                raise ValueError
             except ValueError:
                 print_warning('Необходимо указать ненулевое целое число!')
     title = f'Результирующая формула: {coeff_dict["a"]}*x**2' \
             f'{"+" if coeff_dict["b"] < 0 else "-"}{coeff_dict["b"] * (-1 if coeff_dict["b"] < 0 else 1)}*x' \
             f'{"+" if coeff_dict["c"] < 0 else "-"}{coeff_dict["c"] * (-1 if coeff_dict["c"] < 0 else 1)}=0'
-
     print('-' * len(title), title, '-' * len(title), sep='\n')
     # расчёт и вывод результата
     d = (-1 * coeff_dict['b']) ** 2 + 4 * coeff_dict['a'] * coeff_dict['c']
