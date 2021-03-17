@@ -12,7 +12,13 @@ def summary(depo,percent,year):
         per_month = decimal.Decimal(depo)*decimal.Decimal(perc_per_month)
         depo+=per_month
 
+
     return depo
 
+def show_my_money(depo):
 
-print (summary(20000, 15, 5))
+    print("Сумма вашего депозита равна :",int(depo),"руб.",(round(depo%1*100)),"коп.")
+
+
+sum = summary(20000, 15, 5)
+show_my_money(sum)
