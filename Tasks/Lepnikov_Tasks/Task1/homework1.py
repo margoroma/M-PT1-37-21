@@ -23,7 +23,7 @@ def print_warning(warning_str, delay=1.5):
     """
     print(f'\r{warning_str}', end='')
     sleep(delay)
-    print('\r', end='')
+    print('\r', ' ' * len(warning_str), end='\r')  # - костыль ("затирание" строки)
 
 
 def calc_deposit():
