@@ -1,59 +1,32 @@
-import datetime
+from datetime import datetime
 
 
 def convert_time(time_string):
-    hour_min_lexicon = {
-        0: 'первого',
-        1: 'второго',
-        2: 'третьего',
-        3: 'четвертого',
-        4: 'пятого',
-        5: 'шестого',
-        6: 'седьмого',
-        7: 'восьмого',
-        8: 'девятого',
-        9: 'десятого',
-        10: 'одиннадцатого',
-        11: 'двенадцатого',
-        12: 'первого',
-        13: 'второго',
-        14: 'третьего',
-        15: 'четвертого',
-        16: 'пятого',
-        17: 'шестого',
-        18: 'седьмого',
-        19: 'восьмого',
-        20: 'девятого',
-        21: 'десятого',
-        22: 'одиннадцатого',
-        23: 'двенадцатого',
-    }
-
-    hour_max_lexicon = {
-        0: 'час',
-        1: 'два',
-        2: 'три',
-        3: 'четыре',
-        4: 'пять',
-        5: 'шесть',
-        6: 'семь',
-        7: 'восемь',
-        8: 'девять',
-        9: 'десять',
-        10: 'одиннадцать',
-        11: 'двенадцать',
-        12: 'час',
-        13: 'два',
-        14: 'три',
-        15: 'четыре',
-        16: 'пять',
-        17: 'шесть',
-        18: 'семь',
-        19: 'восемь',
-        20: 'девять',
-        21: 'десять',
-        22: 'одиннадцать',
-        23: 'двенадцать',
+    hour_lexicon = {
+        0: ['первого', 'час'],
+        1: ['второго', 'два'],
+        2: ['третьего', 'три'],
+        3: ['четвертого', 'четыре'],
+        4: ['пятого', 'пять'],
+        5: ['шестого', 'шесть'],
+        6: ['седьмого', 'семь'],
+        7: ['восьмого', 'восемь'],
+        8: ['девятого', 'девять'],
+        9: ['десятого', 'десять'],
+        10: ['одиннадцатого', 'одиннадцать'],
+        11: ['двенадцатого', 'двенадцать'],
+        12: ['первого', 'час'],
+        13: ['второго', 'два'],
+        14: ['третьего', 'три'],
+        15: ['четвертого', 'четыре'],
+        16: ['пятого', 'пять'],
+        17: ['шестого', 'шесть'],
+        18: ['седьмого', 'семь'],
+        19: ['восьмого', 'восемь'],
+        20: ['девятого', 'девять'],
+        21: ['десятого', 'десять'],
+        22: ['одиннадцатого', 'одиннадцать'],
+        23: ['двенадцатого', 'двенадцать'],
     }
 
     second_digit_minutes_lexicon = {
@@ -89,7 +62,8 @@ def convert_time(time_string):
     current_minutes = int(current_time_split[1])
 
     if current_minutes == 30:
-        return_string = f'Половина {hour_min_lexicon[current_hours]}'
+
+        return_string = f'Половина {hour_lexicon[current_hours][0]}'
     elif current_minutes == 0:
         if current_hours == 0:
             return_string = 'В Петропавловске-Камчатском полночь'
@@ -102,22 +76,17 @@ def convert_time(time_string):
                 hours_string = 'часа '
             else:
                 hours_string = 'часов '
-            return_string = f'{str.capitalize(str(hour_max_lexicon[current_hours - 1]))} {hours_string}ровно'
-    elif current_minutes > 34:
+            return_string = f'{str.capitalize(str(hour_lexicon[current_hours - 1][1]))} {hours_string}ровно'
+    elif current_minutes > 39:
         a = 60 - current_minutes
-        first_string_minutes = ''
-        if 10 <= a < 20:
+        minutes_string = ''
+        if 5 <= a < 20:
             minutes_string = second_digit_minutes_lexicon[a]
-            minutes_string = minutes_string.replace('ь', 'и')
+        elif a == 20:
+            minutes_string = first_digit_minutes_lexicon[a // 10]
         else:
             second_digit_a = a % 10
-            if a >= 20:
-                first_string_minutes = first_digit_minutes_lexicon[a // 10]
-                first_string_minutes = first_string_minutes.replace('ь', 'и')
-            if second_digit_a > 4:
-                minutes_string = second_digit_minutes_lexicon[second_digit_a]
-                minutes_string = minutes_string.replace('ь ', 'и ')
-            elif second_digit_a == 1:
+            if second_digit_a == 1:
                 minutes_string = 'одной минуты'
             elif second_digit_a == 2:
                 minutes_string = 'двух минут'
@@ -125,28 +94,25 @@ def convert_time(time_string):
                 minutes_string = 'трех минут'
             elif second_digit_a == 4:
                 minutes_string = 'четырех минут'
-            elif second_digit_a == 0:
-                minutes_string = first_string_minutes
-            if not a // 10 == 0:
-                minutes_string = f'{first_string_minutes} {minutes_string}'
-        return_string = f'Без {minutes_string} {hour_max_lexicon[current_hours]}'
+        minutes_string = minutes_string.replace('ь', 'и')
+        return_string = f'Без {minutes_string} {hour_lexicon[current_hours][1]}'
     else:
         if current_minutes < 20:
-            return_string = f'{str.capitalize(str(second_digit_minutes_lexicon[current_minutes]))} {hour_min_lexicon[current_hours]}'
+            return_string = f'{str.capitalize(str(second_digit_minutes_lexicon[current_minutes]))} {hour_lexicon[current_hours][0]}'
         else:
             first_digit = current_minutes // 10
             second_digit = current_minutes % 10
-            return_string = f'{str.capitalize(str(first_digit_minutes_lexicon[first_digit]))} {second_digit_minutes_lexicon[second_digit]} {hour_min_lexicon[current_hours]}'
+            return_string = f'{str.capitalize(str(first_digit_minutes_lexicon[first_digit]))} {second_digit_minutes_lexicon[second_digit]} {hour_lexicon[current_hours][0]}'
 
     return return_string
 
 
-current_time = datetime.datetime.now()
+current_time = datetime.now()
 current_time = current_time.strftime("%H:%M")
 
 print(current_time)
 print(convert_time(current_time))
-for i in range(60):
-    print(convert_time(f'4:{i}'))
-#b = input('Введите время в формате ЧЧ:ММ\n')
-#print(convert_time(b))
+#for i in range(24):
+#    print(convert_time(f'{i}:40'))
+
+print(convert_time(input('Введите время в формате ЧЧ:ММ\n')))
