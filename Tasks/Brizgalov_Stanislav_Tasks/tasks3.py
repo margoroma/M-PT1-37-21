@@ -40,6 +40,7 @@ l5 = {1: "час ровно", 2: "ровно два часа", 3: "ровно т
 t = datetime.datetime.today()
 print(t.strftime("%H.%M"))
 
+
 # Реализовать текстовый вывод времени
 if 1 <= t.minute <= 39:
     x1 = l1[t.hour]
