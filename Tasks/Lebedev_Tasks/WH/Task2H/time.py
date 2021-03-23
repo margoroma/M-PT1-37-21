@@ -1,7 +1,7 @@
 import time
-c_datetime = time.strftime("%H:%M")
-print(c_datetime)
-#c_datetime=input('Введите текущее время: ')
+#c_datetime = time.strftime("%H:%M")
+#print(c_datetime)
+c_datetime=input('Введите текущее время: ')
 #create a list
 c_datetime_list = c_datetime.split(":")
 #separate the list
@@ -166,5 +166,7 @@ elif 40<=m_int<=59:
     print(minutes_B[m], hours_WoE[h])
 elif m_int == 0:
     print(hours_IF00[h], minutes_T39[m])
+else:
+    print('Произошла ошибка')
 
 
