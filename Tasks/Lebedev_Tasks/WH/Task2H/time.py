@@ -8,6 +8,7 @@ c_datetime_list = c_datetime.split(":")
 h = c_datetime_list[0]
 m = c_datetime_list[1]
 
+h_int=int(h)
 m_int=int(m)
 
 
@@ -161,13 +162,12 @@ minutes_B = {
     "58" : "без двух минут",
     "59" : "без одной минуты",
 }
-if 0 < m_int < 40:
+if  0 <= h_int <= 24 and 0 < m_int < 40:
     print(minutes_T39[m], hours_WE[h])
-elif 40<=m_int<=59:
+elif 0 <= h_int <= 24 and 40<=m_int<=59:
     print(minutes_B[m], hours_WoE[h])
-elif m_int == 0:
+elif 0 <= h_int <= 24 and m_int == 0:
     print(hours_IF00[h], minutes_T39[m])
 else:
     print('Произошла ошибка')
-
 
