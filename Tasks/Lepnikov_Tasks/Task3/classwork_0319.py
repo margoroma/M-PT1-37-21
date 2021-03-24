@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import math
+
+
 def transform_eq_str():
     required_chars = 'xy='  # - символы, которые должны быть в строке уравнения
     # вывод заголовка
@@ -18,15 +21,18 @@ def transform_eq_str():
         try:
             # запрос ввода значения переменной "x", очистка от пробелов и проверка введённой строки
             x = float(input('Введите значение переменной "x": ').replace(' ', ''))
-            break
+            if math.isfinite(x):
+                break
+            raise ValueError
         except ValueError:
-            print('Необходимо указать число!')
+            print('Необходимо указать число, не представляющее бесконечность!')
     # подстановка значения переменной "x" в формулу
     eq_str = eq_str.replace('x', f'*{"(" if x < 0 else ""}{x}{")" if x < 0 else ""}')
     title = f'Расчёт уравнения "{eq_str}":'
     print('-' * len(title), title, sep='\n')
     # расчёт и вывод результата
     print(f'y = {eval(eq_str.replace("y", "").replace("=", ""))}')
+    input('\nНажмите клавишу <Enter>, чтобы завершить программу ...')
 
 
 if __name__ == '__main__':
