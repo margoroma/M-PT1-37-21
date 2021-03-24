@@ -1,4 +1,5 @@
 # Вывод текущего времени
+# Вывод текущего времени
 
 import datetime
 d = (datetime.datetime.today().strftime("%H:%M"))
