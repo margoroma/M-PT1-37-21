@@ -6,9 +6,13 @@ z = z.replace('y=', '')
 print(z)
 mas=z.split('x')
 
-print(mas)
+x=mas[0]
 
-x=int(mas[0])
+if x=='':
+    x=1
+else:
+    x=int(mas[0])
+
 b=int(mas[1])
 
 x1 = input("Введите Х:")

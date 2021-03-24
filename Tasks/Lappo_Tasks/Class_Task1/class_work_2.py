@@ -3,12 +3,13 @@ z = input("Введите уравнение:")
 char1 = '='
 char2 = 'x'
 
-per1 = z[z.find(char1)+1 : z.find(char2)]
-per1 = per1.replace(' ', '')
+per1 = z.replace(' ', '')
+per1 = per1[per1.find(char1)+1 : per1.find(char2)]
 
-per1 = int (per1)
+if per1 == '':
+    per1=1
 
-char1 = '+'
+char1 = 'x'
 
 
 per2 = z[z.find(char1)+1 : ]

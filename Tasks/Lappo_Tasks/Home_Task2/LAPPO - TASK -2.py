@@ -58,13 +58,13 @@ if (m==0 and h>=0 and h<=24):
 elif (m==30 and h>=0 and h<=24):
     rezult=str(dic_min_p[m])+" "+str(dic_hour_r[h][1])
 
-elif (m>1 and m<=29 and h>=0 and h<=24):
+elif (m>=1 and m<=29 and h>=0 and h<=24):
     rezult=str(dic_min_p[m])+" "+str(dic_hour_r[h][1])
 
-elif (m>31 and m<=39 and h>=0 and h<=24):
+elif (m>=31 and m<=39 and h>=0 and h<=24):
     rezult=str(dic_min_p[m])+" "+str(dic_hour_r[h][1])
 
-elif (m>40 and m<=59 and h>=0 and h<=24):
+elif (m>=40 and m<=59 and h>=0 and h<=24):
     rezult=str(dic_min_p[m])+" "+str(dic_hour_r[h][2])
 
 else: 
