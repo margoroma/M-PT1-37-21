@@ -154,7 +154,6 @@ def time_to_word(time_var):
                             mins = d_m.get(key)
 
                 else:
-                    print(m1)
                     m_ = dict_min.get(int(m1))
                     for key in d_m.keys():                    # Вывод слова "минут"
                         if int(m1) in key:
