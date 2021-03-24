@@ -1,5 +1,6 @@
 """
 Текстовый вывод времени
+
 Реализовать текстовый вывод текущего времени +
 текстовый вывод времени, введённого с консоли.
 Для получения текущего времени использовать модуль datetime.
@@ -22,7 +23,8 @@ def time_string(time):
         9: ["девятого", "девять"],
         10: ["десятого", "десять"],
         11: ["одиннадцатого", "одиннадцать"],
-        12: ["двенадцатого", "двенадцать"]
+        12: ["двенадцатого", "двенадцать"],
+        13: ["первого", "час"]
     }
 
     min_dict = {
@@ -51,15 +53,17 @@ def time_string(time):
         20: "двадцать ",
         30: "тридцать "
     }
+
     time_str = ""
     hours = int(time.split(':')[0])
     minutes = int(time.split(':')[1])
 
-    if hours >= 12:
+    if hours > 12:
         hours -= 12
+
     if minutes == 0:
         if hours == 0:
-            time_str = "Полночь"
+            time_str = str(hours_dict[hours])
         else:
             if hours == 1:
                 hours_end = ""
@@ -108,4 +112,10 @@ print(time_string(time_mod))
 
 print("\nВремя пользователя")
 time_user = input('Введите время в формате ЧЧ:ММ\n')
-print(time_string(time_user))
+hours_user = int(time_user.split(':')[0])
+minutes_user = int(time_user.split(':')[1])
+
+if (hours_user >= 24) or (minutes_user > 59):
+    print("Неверные значения времени")
+else:
+    print(time_string(time_user))
