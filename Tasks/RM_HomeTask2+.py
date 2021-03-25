@@ -90,8 +90,6 @@ d_m = {(1,): 'минута',
 
 l_bez = [30, 40, 45, 50, 55]                          # Список исключений
 
-
-
 def time_to_word(time_var):
     t3 = time_var.replace(' ', '').split(':')
 
