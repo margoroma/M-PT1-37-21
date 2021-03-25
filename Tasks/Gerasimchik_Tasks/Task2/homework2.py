@@ -29,7 +29,7 @@ def convert_time(time_string):
         23: ['двенадцатого', 'двенадцать'],
     }
 
-    second_digit_minutes_lexicon = {
+    ones_minutes_lexicon = {
         1: 'одна минута',
         2: 'две минуты',
         3: 'три минуты',
@@ -52,14 +52,20 @@ def convert_time(time_string):
         0: 'минут',
 
     }
-    first_digit_minutes_lexicon = {
+    tens_minutes_lexicon = {
         2: 'двадцать',
         3: 'тридцать',
     }
+    try:
+        time_string.replace(' ', '')
+        current_time_split = time_string.split(':')
+        current_hours = int(current_time_split[0])
+        current_minutes = int(current_time_split[1])
+    except ValueError:
+        return 'Недопустимый символ. Время должно содержать только числа и разделитель ":"'
 
-    current_time_split = time_string.split(':')
-    current_hours = int(current_time_split[0])
-    current_minutes = int(current_time_split[1])
+    if 0 < current_hours > 23 or 0 < current_minutes > 59:
+        return 'Время должно быть в диапазоне от 00:00 до 23:59'
 
     if current_minutes == 30:
 
@@ -81,9 +87,9 @@ def convert_time(time_string):
         a = 60 - current_minutes
         minutes_string = ''
         if 5 <= a < 20:
-            minutes_string = second_digit_minutes_lexicon[a]
+            minutes_string = ones_minutes_lexicon[a]
         elif a == 20:
-            minutes_string = first_digit_minutes_lexicon[a // 10]
+            minutes_string = tens_minutes_lexicon[a // 10]
         else:
             second_digit_a = a % 10
             if second_digit_a == 1:
@@ -98,11 +104,11 @@ def convert_time(time_string):
         return_string = f'Без {minutes_string} {hour_lexicon[current_hours][1]}'
     else:
         if current_minutes < 20:
-            return_string = f'{str.capitalize(str(second_digit_minutes_lexicon[current_minutes]))} {hour_lexicon[current_hours][0]}'
+            return_string = f'{str.capitalize(str(ones_minutes_lexicon[current_minutes]))} {hour_lexicon[current_hours][0]}'
         else:
             first_digit = current_minutes // 10
             second_digit = current_minutes % 10
-            return_string = f'{str.capitalize(str(first_digit_minutes_lexicon[first_digit]))} {second_digit_minutes_lexicon[second_digit]} {hour_lexicon[current_hours][0]}'
+            return_string = f'{str.capitalize(str(tens_minutes_lexicon[first_digit]))} {ones_minutes_lexicon[second_digit]} {hour_lexicon[current_hours][0]}'
 
     return return_string
 
@@ -112,7 +118,7 @@ current_time = current_time.strftime("%H:%M")
 
 print(current_time)
 print(convert_time(current_time))
-#for i in range(24):
+# for i in range(24):
 #    print(convert_time(f'{i}:40'))
 
 print(convert_time(input('Введите время в формате ЧЧ:ММ\n')))
