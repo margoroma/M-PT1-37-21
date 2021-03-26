@@ -3,6 +3,7 @@
 # 30 - половина
 # 40-59 - без 20-1 минут
 # 00 - часов ровно
+
 from datetime import datetime
 def slovami(h_c,m_с):
 
@@ -89,14 +90,5 @@ if flag == 0:
 if flag == 1:
     print("Вы ввели следующее")
     slovami(h_с, m_с)
-    flag = 2
-if flag == 2:
-    cha = 0
-    min = 0
-    while cha <= 24:
-        min = 0
-        while min <= 59:
-            slovami(cha, min)
-            min = min + 1
+    flag = 0
 
-        cha = cha + 1
