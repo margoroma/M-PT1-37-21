@@ -24,8 +24,7 @@ digit_lexicon = (
     'twenty',
 )
 a = a.split(' ')
-a = [digit_lexicon.index(i) for i in a]
-a = list(set(a))
+a = list(set([digit_lexicon.index(i) for i in a]))
 a.sort()
 a.append(0)
 for i in range(len(a)-1):
