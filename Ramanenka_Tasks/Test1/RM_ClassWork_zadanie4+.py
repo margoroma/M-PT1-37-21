@@ -21,23 +21,26 @@ for i in new_list:                                          # В числа
 print(f'Преобразованный в числа список - {new_list}')
 
 
-for i in new_list:                                          # Убрать повторы
-    if new_list.count(i) > 1:
-        new_list.pop(new_list.index(i))
-print(f'Список без повторов {new_list}')
+# for i in new_list:                                          # Убрать повторы сложным способом
+#     if new_list.count(i) > 1:
+#         new_list.pop(new_list.index(i))
+# print(f'Список без повторов {new_list}')
 
-new_list.sort()                                    
-print(f'Возрастающий список - {new_list}')                  #Сортировка по возрастанию
+list_sort = list(dict.fromkeys(new_list))
+print(f'Список без повторов {list_sort}')                                            # Убрать повторы просто
+
+list_sort.sort()                                    
+print(f'Возрастающий список - {list_sort}')                  #Сортировка по возрастанию
 
 
 print(f'Математические операции с элементами списка (построчно - сумма, произведение и т.д.):')
-for i in range(len(new_list)-1):                            # Мат. операции
+for i in range(len(list_sort)-1):                            # Мат. операции
     if i == 0:
-        print(new_list[i] + new_list[i+1])
+        print(list_sort[i] + list_sort[i+1])
     elif i % 2 != 0:
-        print(new_list[i] * new_list[i+1])
+        print(list_sort[i] * list_sort[i+1])
     else:
-        print(new_list[i] + new_list[i+1])
+        print(list_sort[i] + list_sort[i+1])
 
 
-print(sum(x for x in lis if x%2 != 0))                      # Сумма нечетных чисел в списке
+print(f'Сумма нечетных чисел в списке равна {sum(x for x in list_sort if x%2 != 0)}')                      # Сумма нечетных чисел в списке
