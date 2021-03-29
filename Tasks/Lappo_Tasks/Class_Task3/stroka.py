@@ -1,4 +1,7 @@
 x = "five thirteen two eleven seventeen two one thirteen ten four eight five nineteen"
+
+print("Исходная строка: ",x)
+
 numbers = {
 "one" : 1 ,
 "two" : 2,
@@ -26,6 +29,7 @@ y = x.split(' ')
 
 
 a=0
+
 rez=list()
 
 for i in y:
@@ -33,37 +37,51 @@ for i in y:
     rez.append(y2)
     a+=1
 
+print("В цифры: ",rez)
+
 rez=list(set(rez))
+
+print("Убрали повторы: ",rez)
 
 rez=list(map(int, rez))
 
+print("Перевели в инт: ",rez)
 
+rez=sorted(rez)
+
+print("Посортировали: ",rez)
 
 
 rez2=list()
 i=1
 
 while i < len(sorted(rez)):
-    c=rez2[i-1]*rez2[i]
+    c=rez[i-1]*rez[i]
     rez2.append(c)
     i+=1
+    if i >= len(sorted(rez)):
+        break
+    c2=rez[i-1]+rez[i]
+    rez2.append(c2)
+    i+=1
+    if i >= len(sorted(rez)):
+        break
 
 
-#print(rez)
+print("Перемножили и сложили: ",rez2)
 
 
+rez3=list()
+i=1
+сount=0
 
-
-#for i in y:
-#    z=numbers[y[i]]
-#    rez.append(z)
-#    i+=1
-
-#print(rez)
-
-
-#y1 = y[0]
-#print(y1)
-
-#y2 =str(numbers[y1])
-#print(y2)
+while i < len(sorted(rez2)):
+    if rez2[i-1]==int(rez2[i-1]/2)*2:
+        i+=1
+        continue
+    сount+=rez2[i-1]
+    rez3.append(rez2[i-1])
+    i+=1
+    
+print("Нечетные числа: ",rez3)
+print("Сумма нечетных чисел: ",сount)
