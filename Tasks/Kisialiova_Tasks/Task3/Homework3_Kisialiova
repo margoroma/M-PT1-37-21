@@ -1,0 +1,77 @@
+def fill_string_with_whitespaces(string_list, min_whitespace_count, additional_whitespaces_count):
+    result_string = ''
+    gap_counter = len(string_list) - 1
+    for word in string_list:
+        result_string += word
+        if gap_counter > 0:
+            result_string += min_whitespace_count * ' '
+            gap_counter -= 1
+            if additional_whitespaces_count > 0:
+                result_string += ' '
+                additional_whitespaces_count -= 1
+    return result_string
+
+
+def format_row(string_list, string_length):
+    gap_count = len(string_list) - 1
+    whitespace_count = string_length - len(''.join(string_list))
+    if gap_count == 0:
+        result_string = string_list[0]
+    else:
+        min_whitespace_count = whitespace_count // gap_count
+        additional_whitespaces_count = whitespace_count % gap_count
+        result_string = fill_string_with_whitespaces(string_list, min_whitespace_count, additional_whitespaces_count)
+    return result_string
+
+
+def get_formatted_paragraph(p, string_length):
+    if len(p) <= user_input:
+        return p
+    else:
+        words = p.split()
+        word_list = []
+        current_row_list = []
+        current_row_length = 0
+        for word in words:
+            if len(word) + current_row_length + 1 > string_length:
+                word_list.append(current_row_list)
+                current_row_list = []
+                current_row_length = 0
+            current_row_list.append(word)
+            current_row_length += len(word) + 1
+        if current_row_list:
+            word_list.append(current_row_list)
+        rows = []
+        for w in word_list:
+            row = format_row(w, string_length)
+            rows.append(row)
+        return '\n'.join(rows)
+
+
+if __name__ == '__main__':
+    while True:
+        user_input = (input('Введите число больше 15: '))
+        if user_input.isdigit() is True:
+            if int(user_input) <= 15:
+                print('Вы ввели число меньше 15')
+
+            else:
+                break
+        else:
+            print('Неправильный ввод данных')
+    user_input = int(user_input)
+    f = open('text.txt', "r")
+    text = f.read()
+    f.close()
+    paragraphs = text.split('\n')
+
+    new_text = []
+
+    for p in paragraphs:
+        formatted_p = get_formatted_paragraph(p, user_input)
+        new_text.append(formatted_p)
+    formatted_text = '\n'.join(new_text)
+
+    with open('final_text.txt', 'w') as f:
+        f.write(formatted_text)
+    print('Отформатированный текст находится в файле final_text.txt')
