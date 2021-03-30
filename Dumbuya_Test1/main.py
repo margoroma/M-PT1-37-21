@@ -19,7 +19,6 @@ for x in l:
 
 a = [1, 2, 3, 5]
 b = [1, 3, 2, 7]
-
 if len(a) == len(b):
     for i in range(len(a)):
         if a[i] == b[i]:
@@ -27,18 +26,27 @@ if len(a) == len(b):
         else:
             print('Not equal')
 
-string = {'five': 5, 'thirteen': 13, 'two': 2, 'eleven': 11, 'seventeen': 17,
-          'two': 2, 'one': 1, 'thirteen': 13, 'ten': 10, 'four': 4, 'eight': 8,
-          'five': 5, 'nineteen': 19}
+string = 'five thirteen two eleven seventeen two one thirteen ten four eight five nineteen'.split(' ')
+dict_for_string = {'five': 5, 'thirteen': 13, 'two': 2, 'eleven': 11, 'seventeen': 17,
+                   'one': 1, 'ten': 10, 'four': 4, 'eight': 8, 'nineteen': 19}
+str_to_num = set()
+for s in string:
+    str_to_num.add(dict_for_string[s])
 
-values = string.values()
-no_dublicates = set(values)
-no_dublicates2 = list(no_dublicates)
-list_mult = [((x * y), (x + y)) for (x, y) in zip(no_dublicates2[:-1], no_dublicates2[1:])]
+no_duplicates = list(str_to_num)
+print(no_duplicates)
 
-unzipped_object = zip(*list_mult)
-unzipped_list = list(unzipped_object)
-unzipped_list = [y for x in unzipped_list for y in x]
-print(unzipped_list)
-sum_odds = sum(n for n in unzipped_list if n % 2)
+summery = []
+last_action = True
+
+for i in range(len(no_duplicates)):
+    if i % 2 != 0:
+        if last_action:
+            summery.append(no_duplicates[i] + no_duplicates[i - 1])
+            last_action = False
+        else:
+            summery.append(no_duplicates[i] * no_duplicates[i - 1])
+            last_action = True
+print(summery)
+sum_odds = sum(n for n in summery if n % 2)
 print(sum_odds)
