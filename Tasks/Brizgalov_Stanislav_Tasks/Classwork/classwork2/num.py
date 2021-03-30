@@ -3,16 +3,21 @@ a = {'five': 5, 'thirteen': 13, 'two': 2, 'eleven': 11, 'seventeen': 17, 'two': 
      'ten': 10, 'four': 4, 'eight': 8, 'five': 5, 'nineteen': 19}
 
 a = set(a.values())
-a = list(a)
 a = sorted(a)
 print(a)
 
-a = [a[0] + a[1], a[1] * a[2], a[2] + a[3], a[3] * a[4], a[4] + a[5], a[5] * a[6], a[6] + a[7], a[7] * a[8],
-     a[8] + a[9]]
-print(a)
+k = []
+for x in range(len(a) - 1):
+    if x == 0:
+        k.append(a[x] + a[x + 1])
+    elif x % 2 == 1:
+        k.append(a[x] * a[x + 1])
+    else:
+        k.append(a[x] + a[x + 1])
+print(k)
 
 z = []
-for i in a:
+for i in k:
     if i % 2 == 1:
         z.append(i)
 print(sum(z))
