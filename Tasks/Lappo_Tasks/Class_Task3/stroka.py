@@ -60,7 +60,7 @@ i=1
 while i < len(sorted(rez)):
     c=rez[i-1]*rez[i]
     
-    if c%2!=0:
+    if c%2:
         сount+=c
         rez3.append(c)
 
@@ -70,7 +70,7 @@ while i < len(sorted(rez)):
         break
     c2=rez[i-1]+rez[i]
 
-    if c2%2!=0:
+    if c2%2:
         сount+=c2
         rez3.append(c2)
 
