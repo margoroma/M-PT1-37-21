@@ -1,7 +1,6 @@
 stroka = 'five thirteen two eleven seventeen two one thirteen ten four eight five nineteen'
 new_list = stroka.split(' ')
 print(f'Список из строки - {new_list}')
-chisla = [5, 13, 2, 11, 17, 2, 1, 13, 10, 4, 8, 5, 19]
 dict_num = {'one': 1,
             'two': 2,
             'four': 4,
@@ -13,34 +12,20 @@ dict_num = {'one': 1,
             'seventeen': 17,
             'nineteen': 19}
 
-
 for i in new_list:                                          # В числа
-    for key in dict_num.keys():
-        if i == key:
-            new_list[new_list.index(i)] = dict_num.get(key)
+    new_list[new_list.index(i)] = dict_num.get(i)
 print(f'Преобразованный в числа список - {new_list}')
 
+new_list = list(sorted(set(new_list)))
+print(f'Упорядоченный список без повторов {new_list}')      # Без повторов + сортировка
 
-# for i in new_list:                                          # Убрать повторы сложным способом
-#     if new_list.count(i) > 1:
-#         new_list.pop(new_list.index(i))
-# print(f'Список без повторов {new_list}')
-
-list_sort = list(dict.fromkeys(new_list))
-print(f'Список без повторов {list_sort}')                                            # Убрать повторы просто
-
-list_sort.sort()                                    
-print(f'Возрастающий список - {list_sort}')                  #Сортировка по возрастанию
-
-
-print(f'Математические операции с элементами списка (построчно - сумма, произведение и т.д.):')
-for i in range(len(list_sort)-1):                            # Мат. операции
+print(f'\nМатематические операции с элементами списка:')
+for i in range(len(new_list)-1):                            # Мат. операции
     if i == 0:
-        print(list_sort[i] + list_sort[i+1])
+        print(f'Сумма первых 2-х элементов равна {new_list[i] + new_list[i+1]}')
     elif i % 2 != 0:
-        print(list_sort[i] * list_sort[i+1])
+        print(f'Произведение {i+1}-го и {i+2}-го элементов равно {new_list[i] * new_list[i+1]}')
     else:
-        print(list_sort[i] + list_sort[i+1])
+        print(f'Сумма {i+1}-го и {i+2}-го элементов равна {new_list[i] + new_list[i + 1]}')
 
-
-print(f'Сумма нечетных чисел в списке равна {sum(x for x in list_sort if x%2 != 0)}')                      # Сумма нечетных чисел в списке
+print(f'\nСумма нечетных чисел в списке равна {sum(i for i in new_list if i%2 != 0)}')  # Сумма нечетных чисел в списке
