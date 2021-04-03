@@ -8,15 +8,15 @@ def format_text(page_width):
     for line in raw_text.split('\n'):
         inter_list_1 = []
         inter_list_2 = []
-        count = 0
+        string_length = 0
         for word in line.split():
-            if count + len(word) <= page_width:
+            if string_length + len(word) <= page_width:
                 inter_list_1.append(word)
-                count += len(word) + 1
+                string_length += len(word) + 1
             else:
                 inter_list_2.append(inter_list_1)
                 inter_list_1 = [word]
-                count = len(word) + 1
+                string_length = len(word) + 1
         inter_list_2.append(inter_list_1)
         for line_str in inter_list_2:
             if len(line_str) == 1:
