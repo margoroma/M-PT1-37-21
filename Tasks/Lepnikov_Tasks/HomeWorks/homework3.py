@@ -26,7 +26,6 @@ def get_lines_list(line, line_max_lenght):
     :param line_max_lenght: int
     :return: list
     """
-    line = full_replace(line.strip(), '  ', ' ')
     if len(line) <= line_max_lenght:
         return [line]
     result = []
@@ -50,14 +49,13 @@ def get_adjusted_lenght_line(line, line_max_lenght):
     :param line_max_lenght: int
     :return: str
     """
-    wildcard = '|'
     line = line.split()
     gaps_count = len(line) - 2
     word_idx = 0
     while len(' '.join(line)) < line_max_lenght:
-        line[word_idx] += wildcard
+        line[word_idx] += ' '
         word_idx = word_idx + 1 if word_idx < gaps_count else 0
-    return ' '.join(line).replace(wildcard, ' ')
+    return ' '.join(line)
 
 
 def create_formatted_file(file_in, file_out='', encoding_in='utf-8', encoding_out='utf-8'):
@@ -84,8 +82,8 @@ def create_formatted_file(file_in, file_out='', encoding_in='utf-8', encoding_ou
                     print(f'{err.__class__.__name__}: {str(err).capitalize()}')
             # чтение файла, форматирование текста, запись в файл
             for line in f_in:
-                f_out.writelines([f'{get_adjusted_lenght_line(i, line_max_lenght)}\n' for i in
-                                  get_lines_list(line, line_max_lenght)])
+                f_out.writelines(f'{get_adjusted_lenght_line(i, line_max_lenght)}\n' for i in
+                                 get_lines_list(full_replace(line.strip(), '  ', ' '), line_max_lenght))
             title = f'Formatted text written to file "{file_out}".'
             print('-' * len(title), title, sep='\n')
     except OSError as err:
