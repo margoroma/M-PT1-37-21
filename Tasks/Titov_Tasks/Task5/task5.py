@@ -13,7 +13,7 @@ def sum_nested_lists(lst):
         if not isinstance(elem, list):
             summa += elem
         else:
-            summa += nested_lists(elem)
+            summa += sum_nested_lists(elem)
     return summa
 
 
