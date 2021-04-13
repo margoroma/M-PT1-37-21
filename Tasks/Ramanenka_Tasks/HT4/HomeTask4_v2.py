@@ -19,24 +19,34 @@ def sort(list_init):
 def get_rangers(list_sorted):
     serie = []
     list_fin = []
-    for i in range(1,len(list_sorted)+1):        
-        if list_sorted[i-1] + 1 == list_sorted[i]:   
-            serie.append(list_sorted[i-1])
+    for i in range(len(list_sorted)-1):
+        # print(list_sorted[i])        
+        if list_sorted[i] + 1 == list_sorted[i+1]:   
             serie.append(list_sorted[i])
+            serie.append(list_sorted[i+1])
         else:
             if len(serie) > 0:
                 list_fin.append(f'{serie[0]}-{serie[-1]}')
                 serie = []
             else:
-                list_fin.append(f'{list_sorted[i-1]}')
-                # list_fin.append(f'{list_sorted[i]}')
+                list_fin.append(f'{list_sorted[i]}')
+    if len(serie) > 1:
+        list_fin.append(f'{serie[0]}-{serie[-1]}')
+    elif len(serie) == 1:
+        list_fin.append(f'{serie[0]}')
+    else:
+        list_fin.append(f"{list_sorted[-1]}")
     return list_fin
 
-list0 = forming_list(6)
+list0 = forming_list(7)
 print(f'Список входной: {list0}')     
 
 list1 = sort(list0) 
 print(f'Сортированный список: {list1}')
 
 list2 = get_rangers(list1)
-print(list2)
+print(f'Список из строк {list2}')
+
+final = ', '.join(list2)
+print(type(final))
+print(f'Строка серий {final}')
