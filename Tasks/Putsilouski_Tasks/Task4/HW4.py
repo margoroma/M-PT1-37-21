@@ -1,19 +1,60 @@
 
-a = input("Список:\n")
+# a = input("Список:\n")
+
+a = "0, 1, 2, 3, 4, 7, 8, 10"
 a = a.split(",")
 for i in range(len(a)):
     a[i]=a[i].replace(" ","")
-i=0
+n=0
 y=len(a)
-
-def get_ranges(i,y,*args):
-    final=a[i]
-    for i in a:
-        if
-        if int(a[i])=int(a[i + 1]) - 1: continue
-        else: return 
+print("Длинна спика:", y)
+z=1
 
 
+
+def get_ranges(n,y,z,*args):
+
+    print("Проход:",z)
+
+    global final
+
+    if n==0:
+        final = str(a[n])
+
+    else:
+        final = final+","+str(a[n])
+
+    if n == y - 1:
+        return (final)
+
+
+    for i in range(n, y):
+
+        if i == y - 1:  #проверка на последний элемент
+            final = final + "-" + a[n+1]
+            return (final)
+
+        if int(a[i])==int(a[i + 1]) - 1: continue #проверка на последовательный
+
+        else:  #НЕ подходит
+            if i==n: #final==a[i]:
+                n = i + 1
+                z = z + 1
+                get_ranges(n, y, z, *args)
+                return (final)
+            else:
+                final=final +"-"+ a[i]
+                n = i + 1
+                z = z + 1
+                get_ranges(n, y, z, *args)
+                return (final)
+
+
+
+
+
+
+print(get_ranges(n, y,z, *a))
 
 
 
@@ -38,5 +79,3 @@ def get_ranges(i,y,*args):
     #             print(i)
     # print(final)
 
-
-get_ranges(i,y,*a)
