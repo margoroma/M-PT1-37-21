@@ -1,4 +1,5 @@
-
+"""Recursive function to calculate the sum of all elements in nested list
+"""
 def sum_elem_list(lists):
     summa = 0
     for i in lists:
