@@ -21,14 +21,22 @@ def form_text(list_text, num):
     """ разбиение абзацев на строки в зависимости от длины строки без переносов слов;
         на выходе - список строк для одного абзаца
     """
-    list_lines = []                                             # создание нового списка из строк для абзаца
+    list_words = []                                             # создание нового списка из строк для абзаца
     while len(list_text) > 0:
-        line = list_text[:num]
         if len(list_text) <= num:                               # короткий абзац без изменений
             line = list_text
             last_text = list_text[len(line):]
             list_text = last_text
-        elif line[-1] != ' ' and list_text[num:num+1] != ' ':       # проверка на резку слова в конце строки      
+
+        else:
+            words = list_text.split(' ')
+            while len(line) <= num:
+                for j in range(len(words)-1):
+                    line = words[j] + ' '
+                    last_text = list_text[words[j+1]:]
+                    list_text = last_text
+
+        line[-1] != ' ' and list_text[num:num+1] != ' ':       # проверка на резку слова в конце строки
             ind_last_space = line.rfind(' ')                        # ищется последний пробел в line
             line = list_text[:ind_last_space]                       # по последнему пробелу формаруется строка
             last_text = list_text[len(line)+1:]                     # оставшийся текст после выделения строки
@@ -37,7 +45,7 @@ def form_text(list_text, num):
             last_text = list_text[len(line):]
             list_text = last_text
         
-        list_lines.append(line)
+        list_words.append(line)
     return list_lines                                             # для 1 абзаца   
 
 def strech_text(spisok_lines, num):
