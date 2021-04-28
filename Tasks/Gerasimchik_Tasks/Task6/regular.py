@@ -3,31 +3,31 @@ import arith
 
 
 def calc(string):
-    first = re.search(r'-?(\d+(\.\d*)?|\.\d+)', string).group()     # Ищем первое число
-    if re.search(r'\d[-+*/]', string):  # Если после него есть мат.символ
-        symbol = re.search(r'\d[-+*/]', string).group()[1:]
-        symbol_pos = re.search(r'\d[-+*/]', string).end()   # Парсим этот символ
-        if symbol == '*' or symbol == '/':  # Смотрим приоритет операции, если высший
-            second = re.search(r'(-?\d+(\.\d*)?|\.\d+)', string[symbol_pos:]).group()   # с учетом возможного сочетания мат.операции и отрицательного числа
-            string = string.replace(first + symbol + second, simple_math(first, symbol, second))    # И заменяем первое выражение на результат вычислений
-            return calc(string)     # Уходим на следующий круг
-        else:   # Если приоритет операции низший
-            second_end_position = re.search(r'(-?\d+(\.\d*)?|\.\d+)', string[symbol_pos:]).end() + symbol_pos    # Ищем следующий символ мат.операции
-            if re.search(r'\d[-+*/]', string[second_end_position - 1:]):   # Если такой символ есть
-                next_symbol = re.search(r'\d[-+*/]', string[second_end_position - 1:]).group()[1]
-                if next_symbol == '/' or next_symbol == '*':    # Если следующий символ мат.операции имеет высший приоритет
-                    second = re.search(r'(-?\d+(\.\d*)?|\.\d+)', string[symbol_pos:]).group()   # то парсим второе число
-                    third = re.search(r'(-?\d+(\.\d*)?|\.\d+)', string[second_end_position+1:]).group()     # парсим третье число
+    number = re.compile(r'-?(\d+(\.\d*)?|\.\d+)')
+    math_operand = re.compile(r'\d[-+*/]')
+    first = number.search(string).group()
+    if math_operand.search(string):
+        symbol = math_operand.search(string).group()[1:]
+        symbol_pos = math_operand.search(string).end()
+        second = number.search(string[symbol_pos:]).group()
+        if symbol == '*' or symbol == '/':
+            string = string.replace(first + symbol + second, simple_math(first, symbol, second))
+            return calc(string)
+        else:
+            second_end_position = number.search(string[symbol_pos:]).end() + symbol_pos
+            if math_operand.search(string[second_end_position - 1:]):
+                next_symbol = math_operand.search(string[second_end_position - 1:]).group()[1:]
+                if next_symbol == '/' or next_symbol == '*':
+                    third = number.search(string[second_end_position+1:]).group()
                     string = string.replace(second + next_symbol + third, simple_math(second, next_symbol, third))
-                    return calc(string)     # Уходим на следующий круг
-                else:   # Если следующий символ имеет низший приоритет
-                    second = re.search(r'(-?\d+(\.\d*)?|\.\d+)', string[symbol_pos:]).group()   # то выполняем операцию с первыми двумя символами
-                    string = string.replace(first + symbol + second, simple_math(first, symbol, second))    #
-                    return calc(string)     # Уходим на следующий круг
-            else:   # Если такого символа нет
-                second = re.search(r'(-?\d+(\.\d*)?|\.\d+)', string[symbol_pos:]).group()   # то выполняем операцию с первыми двумя символами
-                string = string.replace(first + symbol + second, simple_math(first, symbol, second))    #
-                return string     # Возвращаем итоговую строку
+                    return calc(string)
+                else:
+                    string = string.replace(first + symbol + second, simple_math(first, symbol, second))
+                    return calc(string)
+            else:
+                second = number.search(string[symbol_pos:]).group()
+                string = string.replace(first + symbol + second, simple_math(first, symbol, second))
+                return string
 
     else:   # Если после числа не нашли мат.операцию
         return string   # Возвращаем итоговую строку
@@ -35,13 +35,13 @@ def calc(string):
 
 def simple_math(a, b, c):
     if b == '+':
-        return str(arith.addition(a, c))
+        return str(arith.add(a, c))
     elif b == '-':
-        return str(arith.subtraction(a, c))
+        return str(arith.sub(a, c))
     elif b == '*':
-        return str(arith.multiplication(a, c))
+        return str(arith.mult(a, c))
     else:
-        return str(arith.division(a, c))
+        return str(arith.div(a, c))
 
 
 def curculator(string):
@@ -55,5 +55,5 @@ def curculator(string):
         return string   # Иначе у нас больше нет выражений, возвращаем результат
 
 
-s = '((12.5+(-4-3))*(12+(2-1))+1)+1-1'
+s = '(((12.5*2+(-4-3)*2)*(12+(2-1))+1)+1-1)'
 print(curculator(s))
