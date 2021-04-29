@@ -3,6 +3,7 @@
 ############################
 
 from math import isfinite
+from decimal import Decimal, InvalidOperation
 
 
 def is_int(string):
@@ -12,6 +13,8 @@ def is_int(string):
     :param string: str
     :return: bool
     """
+    if string.isdigit():
+        return True
     try:
         int(string)
         return True
@@ -27,11 +30,31 @@ def is_float(string):
     :param string: str
     :return: bool
     """
+    if string.isdigit():
+        return True
     try:
         if isfinite(float(string)):
             return True
         raise ValueError
     except ValueError:
+        return False
+
+
+def is_decimal(string):
+    """
+    Checks if a string passed as a parameter can be converted to a Decimal object.
+    If string = NaN or infinity, False is returned.
+
+    :param string: str
+    :return: bool
+    """
+    if string.isdecimal():
+        return True
+    try:
+        if isfinite(Decimal(string)):
+            return True
+        raise InvalidOperation
+    except InvalidOperation:
         return False
 
 

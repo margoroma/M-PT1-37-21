@@ -34,9 +34,8 @@ def get_number_str(expr, idx_math_oper, step=-1):
     result = ''
     idx = idx_math_oper + step
     while idx in range(len(expr)) and expr[idx] not in '/*+':
-        if expr[idx] == '-':
-            if any([all([step == -1, idx]), all([step == 1, idx != idx_math_oper + step])]):
-                break
+        if all([expr[idx] == '-', any([all([step == -1, idx]), all([step == 1, idx != idx_math_oper + step])])]):
+            break
         result += expr[idx]
         idx += step
     return result[::step], idx if step == 1 else idx + 1
