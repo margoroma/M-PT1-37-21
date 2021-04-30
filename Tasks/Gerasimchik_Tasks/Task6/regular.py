@@ -29,8 +29,8 @@ def calc(string):
                 string = string.replace(first + symbol + second, simple_math(first, symbol, second))
                 return string
 
-    else:   # Если после числа не нашли мат.операцию
-        return string   # Возвращаем итоговую строку
+    else:
+        return string
 
 
 def simple_math(a, b, c):
@@ -41,19 +41,23 @@ def simple_math(a, b, c):
     elif b == '*':
         return str(arith.mult(a, c))
     else:
-        return str(arith.div(a, c))
+        if c == '0':
+            print('В процессе вычислений возникло деление на 0')
+            exit(0)
+        else:
+            return str(arith.div(a, c))
 
 
 def curculator(string):
-    if re.search(r'\(([^()]+)\)', string):  # Ищем выражение в скобках самой глубокой вложенности
-        a = calc(re.search(r'\(([^()]+)\)', string).group(1))   # Отправляем это выражение в обработчик выражений без скобок
-        string = string.replace(re.search(r'\(([^()]+)\)', string).group(), a)  # Заменяем выражение в скобках на результат
-        return curculator(string)   # Уходим на следующий круг
-    elif re.search(r'\d[-+*/]', string):    # Если не нашли в скобках, но нашли сочетание Число+Мат.Символ, значит еще есть выражения без скобок
-        return calc(string)     # Отправляем в обработчик выражений без скобок
+    if re.search(r'\(([^()]+)\)', string):
+        a = calc(re.search(r'\(([^()]+)\)', string).group(1))
+        string = string.replace(re.search(r'\(([^()]+)\)', string).group(), a)
+        return curculator(string)
+    elif re.search(r'\d[-+*/]', string):
+        return calc(string)
     else:
-        return string   # Иначе у нас больше нет выражений, возвращаем результат
+        return string
 
 
-s = '(((12.5*2+(-4-3)*2)*(12+(2-1))+1)+1-1)'
+s = '((((12.5*2+(-4-3)*2)*(12+(2-1))+1)+1-1)/(9-9))'
 print(curculator(s))
