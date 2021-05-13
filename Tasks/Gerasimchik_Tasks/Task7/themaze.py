@@ -1,4 +1,6 @@
 import random
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 class Room:
@@ -8,16 +10,36 @@ class Room:
 
 
 class Maze:
-    def __init__(self):
+    def __init__(self, rooms):
         self.maze = {}
+        self.maze_dict = {}
+        self.rooms = rooms
 
-    def maze_gen(self, room):
+    def maze_room_append(self, room):
         self.maze[room.room_id] = room
 
+    def maze_dict_generate(self):
+        listing = [x for x in range(1, self.rooms)]
+        self.maze_dict = {x: [] for x in range(self.rooms)}
 
-class Doors:
-    def doors_gen(self, doors_number, free_rooms):
-        pass
+        for a in self.maze_dict:
+            num = random.randint(1, 2)
+            self.maze_dict[a] = listing[:num]
+            listing = listing[num:]
+
+        for k, v in self.maze_dict.items():
+            for n, m in self.maze_dict.items():
+                if k in m:
+                    self.maze_dict[k] = [n] + v
+
+        return self.maze_dict
+
+    def maze_generate(self, maze_dict):
+        for k, v in maze_dict.items():
+            self.maze_room_append(Room(k, v))
+
+    def create_maze(self):
+        self.maze_generate(self.maze_dict_generate())
 
 
 class Npc:
@@ -32,41 +54,46 @@ class Npc:
         return self.npc_position
 
 
-rooms_num = 20
-maze = Maze()
-maze.maze_gen(Room(0, [1, 2]))
-maze.maze_gen(Room(1, [0, 3]))
-maze.maze_gen(Room(2, [0, 10, 11, 12]))
-maze.maze_gen(Room(3, [1, 4, 5, 6]))
-maze.maze_gen(Room(4, [3, 7, 8]))
-maze.maze_gen(Room(5, [3, 9]))
-maze.maze_gen(Room(6, [3]))
-maze.maze_gen(Room(7, [4]))
-maze.maze_gen(Room(8, [4]))
-maze.maze_gen(Room(9, [5]))
-maze.maze_gen(Room(10, [2]))
-maze.maze_gen(Room(11, [2, 13, 14]))
-maze.maze_gen(Room(12, [2, 6, 7]))
-maze.maze_gen(Room(13, [11, 15, 16]))
-maze.maze_gen(Room(14, [11, 17]))
-maze.maze_gen(Room(15, [13]))
-maze.maze_gen(Room(16, [13]))
-maze.maze_gen(Room(17, [14]))
-maze.maze_gen(Room(18, [12]))
-maze.maze_gen(Room(19, [12]))
+class Play:
+    def __init__(self, rooms):
+        self.rooms = rooms
 
-hero = Npc('Супермен', maze, 0)
-print(f'{hero.npc_type} заспавнился в комнате {hero.npc_position}')
-monster = Npc('Годзила', maze, random.choice(list(maze.maze.keys())))
-print(f'{monster.npc_type} заспавнился в комнате {monster.npc_position}')
-cross = False
-while not cross:
-    hero.move()
-    if hero.npc_position != monster.npc_position:
-        monster.move()
-        if hero.npc_position == monster.npc_position:
-            cross = True
-    else:
-        cross = True
+    def start(self):
+        self.maze = Maze(self.rooms)
+        self.maze.create_maze()
+        hero = Npc('Супермен', self.maze, 0)
+        print(f'{hero.npc_type} заспавнился в комнате {hero.npc_position}')
+        monster = Npc('Годзила', self.maze, random.choice(list(self.maze.maze.keys())))
+        print(f'{monster.npc_type} заспавнился в комнате {monster.npc_position}')
+        cross = False
+        while not cross:
+            hero.move()
+            if hero.npc_position != monster.npc_position:
+                monster.move()
+                if hero.npc_position == monster.npc_position:
+                    cross = True
+            else:
+                cross = True
 
-print(f'{hero.npc_type} и {monster.npc_type} встретились в комнате {hero.npc_position}')
+        print(f'{hero.npc_type} и {monster.npc_type} встретились в комнате {hero.npc_position}')
+
+
+start = Play(10)
+start.start()
+
+
+graph = []
+for i, v in start.maze.maze_dict.items():
+    for a in v:
+        graph.append((i, a))
+
+G = nx.DiGraph()
+G.add_nodes_from(start.maze.maze_dict.keys())
+G.add_edges_from(graph)
+pos = nx.spring_layout(G)
+
+nx.draw_networkx_nodes(G, pos)
+nx.draw_networkx_labels(G, pos)
+nx.draw_networkx_edges(G, pos)
+
+plt.show()
