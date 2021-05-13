@@ -2,7 +2,7 @@
 # Object module #
 #################
 
-import abc
+from abc import ABC, abstractmethod
 
 
 class RoomSide:
@@ -79,19 +79,15 @@ class Room:
         # ! return None
 
 
-class Hero(abc.ABC):
-    shapes = ('random', 'classic', 'turtle', 'arrow', 'circle', 'square', 'triangle')
-    colors = ('random', 'white', 'yellow', 'orange', 'red', 'blue', 'green', 'purple')
+class ObjInRoom(ABC):
+    shapes = ('random', 'turtle', 'arrow', 'classic', 'circle', 'square', 'triangle')
+    colors = ('random', 'blue', 'red', 'yellow', 'orange', 'green', 'purple', 'white', 'grey', 'black')
 
     def __init__(self, **kwds):
         self.__current_room = None
         self.current_room(kwds.get('current_room'))
-        self.__num_moves_at_time = 1
-        self.num_moves_at_time(kwds.get('num_moves_at_time'))
-        self.__strength = 0
-        self.strength(kwds.get('strength'))
 
-    @abc.abstractmethod
+    @abstractmethod
     def __str__(self):
         pass
 
@@ -99,6 +95,46 @@ class Hero(abc.ABC):
         if isinstance(current_room, Room):
             self.__current_room = current_room
         return self.__current_room
+
+
+class Artifact(ObjInRoom):
+    shapes = ('random', 'circle', 'square', 'triangle')
+    colors = ('random', 'white', 'grey', 'black')
+
+    def __init__(self, **kwds):
+        super().__init__(**kwds)
+        self.__value = 0
+        self.value(kwds.get('value'))
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+    def value(self, value=None):
+        if isinstance(value, int):
+            self.__value = value
+        return self.__value
+
+
+class Strength(Artifact):
+    def __str__(self):
+        return f'Artifact "strength" [+{self.value()}] in {self.current_room()}'.capitalize().replace('+-', '-')
+
+
+class Hero(ObjInRoom):
+    shapes = ('random', 'turtle', 'arrow', 'classic')
+    colors = ('random', 'blue', 'red', 'yellow', 'orange', 'green', 'purple')
+
+    def __init__(self, **kwds):
+        super().__init__(**kwds)
+        self.__num_moves_at_time = 1
+        self.num_moves_at_time(kwds.get('num_moves_at_time'))
+        self.__strength = 0
+        self.strength(kwds.get('strength'))
+
+    @abstractmethod
+    def __str__(self):
+        pass
 
     def num_moves_at_time(self, num_moves_at_time=None):
         if isinstance(num_moves_at_time, int):
@@ -113,9 +149,9 @@ class Hero(abc.ABC):
 
 class PositiveHero(Hero):
     def __str__(self):
-        return f'Positive hero in {self.current_room()}'.capitalize()
+        return f'Positive hero [strength {self.strength()}]'
 
 
 class NegativeHero(Hero):
     def __str__(self):
-        return f'Negative hero in {self.current_room()}'.capitalize()
+        return f'Negative hero [strength {self.strength()}]'

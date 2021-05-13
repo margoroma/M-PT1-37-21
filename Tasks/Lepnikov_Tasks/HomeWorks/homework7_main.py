@@ -8,28 +8,36 @@
 import random
 from turtle import *
 from time import sleep
-from homework7_obj import Room, PositiveHero, NegativeHero
+from homework7_obj import Room, Strength, PositiveHero, NegativeHero
 
 _DEFAULTS = {'room_side_len': 40,
              'rooms_num_x': 10,
              'rooms_num_y': 10,
              'room_walls_num_min': 1,
              'room_walls_num_max': 2,
-             'p_hero_shape': 2,
-             'p_hero_color': 5,
-             'p_hero_num_moves_at_time': 0,
-             'p_hero_strength': 10,
-             'n_hero_shape': 2,
-             'n_hero_color': 4,
-             'n_heroes_num_min': 1,
-             'n_heroes_num_max': 10,
-             'n_hero_num_moves_at_time': 0,
-             'n_hero_strength': 1}
+             'artifacts_strength_num': 0,
+             'artifact_strength_shape': 1,
+             'artifact_strength_color': 2,
+             'artifact_strength_val': 0,
+             'p_hero_shape': 1,
+             'p_hero_color': 1,
+             'p_hero_num_moves_at_time': 1,
+             'p_hero_strength': 0,
+             'n_heroes_num': 10,
+             'n_hero_shape': 1,
+             'n_hero_color': 1,
+             'n_hero_num_moves_at_time': 1,
+             'n_hero_strength': 0}
 
 _FONTS = {'main': ('Arial', 18, 'bold'), 'hint': ('Arial', 10, 'bold')}
 
+
+def get_sequence_str(sequence):
+    return ''.join([f'\n{i} - {e}' for i, e in enumerate(sequence)])
+
+
 if __name__ == '__main__':
-    title = '!!! BASTARDS [v.1.0-alpha] !!!'
+    title = '!!! BASTARDS [v.1.1-alpha] !!!'
     window = Screen()
     window.title(f'{title} (Initializing the maze ...)')
     params = {'room_side_len': ('Room side length in pixels', 40, 100),
@@ -50,6 +58,7 @@ if __name__ == '__main__':
                  height=params['rooms_num_y'] * params['room_side_len'] + 100,
                  startx=None, starty=None)
     title = f'{title} [{params["rooms_num_x"]}x{params["rooms_num_y"]}, {params["room_side_len"]}px]'
+    #
     window.title(f'{title} (Building a maze ...)')
     rooms = []
     maze = Turtle()
@@ -103,31 +112,65 @@ if __name__ == '__main__':
     sleep(1.5)
     maze.undo()
     #
-    window.title(f'{title} (Initializing and building heroes ...)')
-    heroes = []
-    # positive hero
-    hero_shapes_str = ''.join([f'\n{i} - {e}' for i, e in enumerate(PositiveHero.shapes)])
-    hero_shapes_num = len(PositiveHero.shapes)
-    hero_colors_str = ''.join([f'\n{i} - {e}' for i, e in enumerate(PositiveHero.colors)])
-    hero_colors_num = len(PositiveHero.colors)
-    params = {'p_hero_shape': (f'Positive hero shape (int, 0-{hero_shapes_num - 1}): {hero_shapes_str}',
-                               0, hero_shapes_num - 1),
-              'p_hero_color': (f'Positive hero color (int, 0-{hero_colors_num - 1}): {hero_colors_str}',
-                               0, hero_colors_num - 1),
+    window.title(f'{title} (Initializing artifacts ...)')
+    shapes_num, shapes_str = len(Strength.shapes), get_sequence_str(Strength.shapes)
+    colors_num, colors_str = len(Strength.colors), get_sequence_str(Strength.colors)
+    params = {'artifacts_strength_num': ('Number of "strength" artifacts (int, 1-10, 0-random)', 0, 10),
+              'artifact_strength_shape': (f'"Strength" artifact shape (int, 0-{shapes_num - 1}): {shapes_str}',
+                                          0, shapes_num - 1),
+              'artifact_strength_color': (f'"Strength" artifact color (int, 0-{colors_num - 1}): {colors_str}',
+                                          0, colors_num - 1),
+              'artifact_strength_val': ('Value of "strength" artifact (int, -10-10, 0-random)', -10, 10)}
+    for k in params:
+        i = numinput('Artifacts parameters', params[k][0], _DEFAULTS[k], params[k][1], params[k][2])
+        params[k] = _DEFAULTS[k] if i is None else int(i)
+    if not params['artifact_strength_shape']:
+        params['artifact_strength_shape'] = random.randrange(1, shapes_num)
+    if not params['artifact_strength_color']:
+        params['artifact_strength_color'] = random.randrange(1, colors_num)
+    #
+    window.title(f'{title} (Building artifacts ...)')
+    artifacts = []
+    for _ in range(params['artifacts_strength_num'] if params['artifacts_strength_num'] else random.randint(1, 10)):
+        artifacts.append((Strength(current_room=random.choice(rooms),
+                                   value=params['artifact_strength_val'] if params['artifact_strength_val']
+                                   else random.randint(1, 10) * random.choice((-1, 1))),
+                          Turtle()))
+        artifacts[-1][1].pen(shown=False,
+                             pendown=False,
+                             pencolor=Strength.colors[params['artifact_strength_color']],
+                             pensize=1,
+                             speed=1)
+        artifacts[-1][1].shape(Strength.shapes[params['artifact_strength_shape']])
+        artifacts[-1][1].color(Strength.colors[params['artifact_strength_color']])
+        artifacts[-1][1].goto(*artifacts[-1][0].current_room().coords())
+        artifacts[-1][1].st()
+        artifacts[-1][1].write(f'{artifacts[-1][0]}\n', align='center', font=_FONTS['hint'])
+        sleep(1)
+        artifacts[-1][1].undo()
+    #
+    window.title(f'{title} (Initializing positive hero ...)')
+    shapes_num, shapes_str = len(PositiveHero.shapes), get_sequence_str(PositiveHero.shapes)
+    colors_num, colors_str = len(PositiveHero.colors), get_sequence_str(PositiveHero.colors)
+    params = {'p_hero_shape': (f'Positive hero shape (int, 0-{shapes_num - 1}): {shapes_str}', 0, shapes_num - 1),
+              'p_hero_color': (f'Positive hero color (int, 0-{colors_num - 1}): {colors_str}', 0, colors_num - 1),
               'p_hero_num_moves_at_time': ('Number of positive hero moves at a time (int, 1-10, 0-random)', 0, 10),
-              'p_hero_strength': ('Positive hero strength (int, 0-100)', 0, 100)}
+              'p_hero_strength': ('Value of positive hero strength (int, 1-20, 0-random)', 0, 20)}
     for k in params:
         i = numinput('Positive hero parameters', params[k][0], _DEFAULTS[k], params[k][1], params[k][2])
         params[k] = _DEFAULTS[k] if i is None else int(i)
     if not params['p_hero_shape']:
-        params['p_hero_shape'] = random.randrange(1, hero_shapes_num)
+        params['p_hero_shape'] = random.randrange(1, shapes_num)
     if not params['p_hero_color']:
-        params['p_hero_color'] = random.randrange(1, hero_colors_num)
-    if not params['p_hero_num_moves_at_time']:
-        params['p_hero_num_moves_at_time'] = random.randint(1, 10)
-    heroes.append((PositiveHero(current_room=random.choice(rooms),
-                                num_moves_at_time=params['p_hero_num_moves_at_time'],
-                                strength=params['p_hero_strength']), Turtle()))
+        params['p_hero_color'] = random.randrange(1, colors_num)
+    #
+    window.title(f'{title} (Building positive hero ...)')
+    heroes = [(PositiveHero(current_room=random.choice(rooms),
+                            num_moves_at_time=params['p_hero_num_moves_at_time']
+                            if params['p_hero_num_moves_at_time'] else random.randint(1, 10),
+                            strength=params['p_hero_strength']
+                            if params['p_hero_strength'] else random.randint(1, 20)),
+               Turtle())]
     heroes[0][1].pen(shown=False,
                      pendown=False,
                      pencolor=PositiveHero.colors[params['p_hero_color']],
@@ -141,36 +184,32 @@ if __name__ == '__main__':
     heroes[0][1].write(f'{heroes[0][0]}\n', align='center', font=_FONTS['hint'])
     sleep(1)
     heroes[0][1].undo()
-    # negative heroes
-    hero_shapes_str = ''.join([f'\n{i} - {e}' for i, e in enumerate(NegativeHero.shapes)])
-    hero_shapes_num = len(NegativeHero.shapes)
-    hero_colors = [i for i in NegativeHero.colors if i != PositiveHero.colors[params['p_hero_color']]]
-    hero_colors_str = ''.join([f'\n{i} - {e}' for i, e in enumerate(hero_colors)])
-    hero_colors_num = len(hero_colors)
-    params = {'n_heroes_num_min': ('Minimum number of negative heroes (int, 1-50):', 1, 50),
-              'n_heroes_num_max': ('Maximum number of negative heroes (int, 1-50):', 1, 50),
-              'n_hero_shape': (f'Negative hero shape (int, 0-{hero_shapes_num - 1}): {hero_shapes_str}',
-                               0, hero_shapes_num - 1),
-              'n_hero_color': (f'Negative hero color (int, 0-{hero_colors_num - 1}): {hero_colors_str}',
-                               0, hero_colors_num - 1),
+    #
+    window.title(f'{title} (Initializing negative heroes ...)')
+    shapes_num, shapes_str = len(NegativeHero.shapes), get_sequence_str(NegativeHero.shapes)
+    colors = [i for i in NegativeHero.colors if i != PositiveHero.colors[params['p_hero_color']]]
+    colors_num, colors_str = len(colors), get_sequence_str(colors)
+    params = {'n_heroes_num': ('Number of negative heroes (int, 1-50, 0-random):', 0, 50),
+              'n_hero_shape': (f'Negative hero shape (int, 0-{shapes_num - 1}): {shapes_str}', 0, shapes_num - 1),
+              'n_hero_color': (f'Negative hero color (int, 0-{colors_num - 1}): {colors_str}', 0, colors_num - 1),
               'n_hero_num_moves_at_time': ('Number of negative hero moves at a time (int, 1-10, 0-random)', 0, 10),
-              'n_hero_strength': ('Negative hero strength (int, 0-100)', 0, 100)}
+              'n_hero_strength': ('Value of negative hero strength (int, 1-10, 0-random)', 0, 10)}
     for k in params:
         i = numinput('Negative heroes parameters', params[k][0], _DEFAULTS[k], params[k][1], params[k][2])
         params[k] = _DEFAULTS[k] if i is None else int(i)
-    if params['n_heroes_num_max'] < params['n_heroes_num_min']:
-        params['n_heroes_num_max'] = params['n_heroes_num_min']
-    for _ in range(random.randint(params['n_heroes_num_min'], params['n_heroes_num_max'])):
+    #
+    window.title(f'{title} (Building negative heroes ...)')
+    for _ in range(params['n_heroes_num'] if params['n_heroes_num'] else random.randint(1, 50)):
         hero_shape = NegativeHero.shapes[
-            params['n_hero_shape'] if params['n_hero_shape'] else random.randrange(1, hero_shapes_num)]
-        hero_color = hero_colors[
-            params['n_hero_color'] if params['n_hero_color'] else random.randrange(1, hero_colors_num)]
-        hero_num_moves_at_time = params['n_hero_num_moves_at_time'] if params[
-            'n_hero_num_moves_at_time'] else random.randint(1, 10)
+            params['n_hero_shape'] if params['n_hero_shape'] else random.randrange(1, shapes_num)]
+        hero_color = colors[params['n_hero_color'] if params['n_hero_color'] else random.randrange(1, colors_num)]
         heroes.append((NegativeHero(current_room=random.choice(rooms),
-                                    num_moves_at_time=hero_num_moves_at_time,
-                                    strength=params['n_hero_strength']), Turtle()))
-        while heroes[-1][0].current_room() is heroes[0][0].current_room():  # ! inf if n_heroes_num => len(rooms)-1
+                                    num_moves_at_time=params['n_hero_num_moves_at_time']
+                                    if params['n_hero_num_moves_at_time'] else random.randint(1, 10),
+                                    strength=params['n_hero_strength']
+                                    if params['n_hero_strength'] else random.randint(1, 10)),
+                       Turtle()))
+        while heroes[-1][0].current_room() is heroes[0][0].current_room():
             heroes[-1][0].current_room(random.choice(rooms))
         heroes[-1][1].pen(shown=False,
                           pendown=False,
@@ -185,18 +224,20 @@ if __name__ == '__main__':
         heroes[-1][1].write(f'{heroes[-1][0]}\n', align='center', font=_FONTS['hint'])
         sleep(1)
         heroes[-1][1].undo()
-    # game loop
+    #
     maze.write("Let's start the battle ...", align='center', font=_FONTS['main'])
     sleep(1.5)
     maze.undo()
     window.title(f'{title} (Battle ...)')
-    while heroes[0][0].strength() >= 0 and heroes[1:]:
+    while heroes[0][0].strength() > 0 and heroes[1:]:
         # heroes movements
         for h in range(2):
-            if heroes[0][0].strength() < 0 or not heroes[1:]:
+            if heroes[0][0].strength() < 1 or not heroes[1:]:
                 break
             hero = (heroes[0], random.choice(heroes[1:]))[h]
             for _ in range(hero[0].num_moves_at_time()):
+                if heroes[0][0].strength() < 1 or not heroes[1:]:
+                    break
                 available_rooms = list(hero[0].current_room().available_rooms().values())
                 if available_rooms:
                     random_room = random.choice(available_rooms)
@@ -204,35 +245,51 @@ if __name__ == '__main__':
                         hero[0].current_room().get_available_room_location(random_room))])
                     hero[1].goto(*random_room.coords())
                     hero[0].current_room(random_room)
-                    contact_hero = None
-                    for i in heroes[1:]:
-                        if not i[1].distance(heroes[0][1].xcor(), heroes[0][1].ycor()):
-                            contact_hero = i
-                            break
-                    if contact_hero:
+                    # eating artifacts
+                    contacts = [i for i in artifacts if i[0].current_room() is hero[0].current_room()]
+                    while contacts:
+                        contact = contacts.pop()
+                        hero[1].resizemode('user')
+                        hero[1].shapesize(2, 2)
+                        sleep(.2)
+                        contact[1].ht()
+                        hero[1].undo()
+                        hero[0].strength(hero[0].strength() + contact[0].value())
+                        if hero[0].strength() < 1:
+                            hero[0].strength(1)
+                        hero[1].write(f'+{contact[0].value()} strength\n'.replace('+-', '-'),
+                                      align='center', font=_FONTS['hint'])
+                        sleep(1)
+                        hero[1].undo()
+                        artifacts.remove(contact)
+                    # fight
+                    contacts = [i for i in heroes[1:] if i[0].current_room() is heroes[0][0].current_room()]
+                    while contacts:
+                        contact = contacts.pop()
+                        contact[1].resizemode('user')
                         heroes[0][1].resizemode('user')
-                        contact_hero[1].resizemode('user')
                         for i in range(3):
-                            for j in (contact_hero[1], heroes[0][1]):
+                            for j in (contact[1], heroes[0][1]):
                                 j.shapesize(2, 2)
                                 sleep(.2)
                                 j.undo()
                                 sleep(.2)
-                        heroes[0][0].strength(heroes[0][0].strength() - contact_hero[0].strength())
-                        heroes[0][1].write(f'{"losing" if heroes[0][0].strength() < 0 else "winning"}\n',
+                        heroes[0][0].strength(heroes[0][0].strength() - contact[0].strength())
+                        heroes[0][1].write(f'{"losing" if heroes[0][0].strength() < 1 else "winning"}\n',
                                            align='center', font=_FONTS['hint'])
                         sleep(1)
                         heroes[0][1].undo()
-                        if heroes[0][0].strength() < 0:
+                        if heroes[0][0].strength() < 1:
                             heroes[0][1].ht()
                             break
-                        contact_hero[1].ht()
-                        heroes.remove(contact_hero)
-    maze.write(f'Positive hero {"lost" if heroes[0][0].strength() < 0 else "won"}!', align='center',
+                        contact[1].ht()
+                        heroes.remove(contact)
+    maze.write(f'Positive hero {"lost" if heroes[0][0].strength() < 1 else "won"}!', align='center',
                font=_FONTS['main'])
     sleep(1.5)
     maze.undo()
     maze.write('GAME OVER', align='center', font=_FONTS['main'])
     sleep(1.5)
     maze.undo()
+    window.title(f'{title} GAME OVER')
     window.mainloop()
