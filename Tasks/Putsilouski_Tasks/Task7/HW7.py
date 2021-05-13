@@ -52,5 +52,6 @@ class labirint(object):
 
 p = labirint.sozdanie(10)
 
+
 print(p)
 
