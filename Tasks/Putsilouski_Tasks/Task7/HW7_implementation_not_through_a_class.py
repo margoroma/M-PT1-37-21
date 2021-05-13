@@ -34,8 +34,6 @@ def chern_lab(labirint_1):
         labirint_1 = dveri(labirint_1, i)
 
     return labirint_1
-
-
 def dveri_sviaz_proverka(komnaty):
     for key in komnaty:
         door_not_update = komnaty[key]  # комната не проверенная
