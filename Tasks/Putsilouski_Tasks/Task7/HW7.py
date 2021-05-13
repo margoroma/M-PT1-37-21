@@ -51,5 +51,6 @@ class labirint(object):
         return(itog_lab)
 
 p = labirint.sozdanie(10)
+
 print(p)
 
