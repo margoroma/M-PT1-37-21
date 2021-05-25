@@ -9,7 +9,7 @@ class Post(models.Model):
     content = models.TextField(blank=False)
     post_type = models.CharField(max_length=1, blank=False, choices=POST_TYPES)
     issued = models.DateTimeField()
-    image = models.ImageField(upload_to=title+'/uploads')
+    image = models.ImageField(upload_to='/uploads')
 
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
 
